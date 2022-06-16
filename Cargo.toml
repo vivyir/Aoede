@@ -1,0 +1,26 @@
+[package]
+name = "aoede"
+version = "0.1.0"
+authors = ["Vivian I. <ayitsmephoenix@airmail.cc>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tracing = "0.1"
+tracing-subscriber = "0.2"
+tracing-futures = "0.2"
+hrtime = "0.2.0"
+youtube_dl = "0.7.0"
+
+[dependencies.songbird]
+version = "0.2.2"
+features = ["builtin-queue"]
+
+[dependencies.serenity]
+version = "0.10"
+features = ["cache", "standard_framework", "voice", "rustls_backend"]
+
+[dependencies.tokio]
+version = "1.0"
+features = ["macros", "rt-multi-thread"]
