@@ -614,13 +614,30 @@ async fn queue_with_prebuf(
             let source = match Restartable::ytdl(url, false).await {
                 Ok(source) => source,
                 Err(why) => {
+                    match why {
+                        input::error::Error::Json {
+                            ref parsed_text, ..
+                        } => {
+                            if parsed_text == "ERROR: Sign in to confirm your age\n" {
+                                check_msg(
+                                    msg.channel_id
+                                        .say(
+                                            &ctx.http,
+                                            "The video you're trying to play is age-restricted.",
+                                        )
+                                        .await,
+                                );
+                            }
+                        }
+                        _ => {
+                            check_msg(
+                                msg.channel_id
+                                    .say(&ctx.http, "Error sourcing ffmpeg (see console)")
+                                    .await,
+                            );
+                        }
+                    }
                     println!("Err starting source: {:?}", why);
-
-                    check_msg(
-                        msg.channel_id
-                            .say(&ctx.http, "Error sourcing ffmpeg (see console)")
-                            .await,
-                    );
 
                     return None;
                 }
